@@ -66,7 +66,7 @@ You need Python 3.10+ and a free Gemini API key from Google AI Studio. When crea
 
 ```bash
 git clone <your-repo-url>
-cd applied-ai-system-project/applied-ai-system-final
+cd applied-ai-system-project
 ```
 
 2. Create and activate a virtual environment
@@ -328,7 +328,6 @@ The biggest thing missing is persistent state — right now everything resets wh
 ## Project Structure
 
 ```
-applied-ai-system-final/
 ├── pawpal_system.py       # core classes: Task, Pet, Owner, Scheduler
 ├── ai_assistant.py        # Gemini integration, both prompt modes, reliability scorer
 ├── app.py                 # Streamlit UI
@@ -339,12 +338,11 @@ applied-ai-system-final/
 ├── .env                   # API key (gitignored)
 ├── .gitignore
 ├── pawpal_ai.log          # AI call log (auto-generated on first run)
+├── assets/
+│   └── system_diagram.mmd # architecture diagram
 ├── tests/
 │   └── test_pawpal.py     # pytest suite
 └── reflection.md          # original assignment reflection
-
-assets/
-└── system_diagram.mmd     # architecture diagram
 ```
 
 ---
