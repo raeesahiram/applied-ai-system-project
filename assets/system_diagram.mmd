@@ -1,0 +1,78 @@
+flowchart TD
+    subgraph User
+      U[Pet Owner]
+    end
+
+    subgraph UI["Streamlit UI — app.py"]
+      A1[Sidebar: Owner name + available minutes]
+      A2[Pet Management: add / remove]
+      A3[Task Management: add / remove / mark done]
+      A4[Generate Schedule button]
+      A5[Schedule table + conflict warnings]
+      A6[AI Explanation panel]
+      A7[Raw scheduler output expander]
+    end
+
+    subgraph Core["PawPal+ Logic — pawpal_system.py"]
+      B1[Owner / Pet / Task models]
+      B2[Scheduler: collect → sort by priority → fit by availability]
+      B3[Conflict Detector: overlaps, duplicate IDs, over-capacity]
+      B4[explain_plan: rule-based text summary]
+    end
+
+    subgraph AI["AI Assistant — ai_assistant.py"]
+      C1["_build_prompt\n(owner + pet names + schedule context)"]
+      C2[Gemini API\ngemini-2.5-flash]
+      C3["score_response\n0.0–1.0 fact check\n(owner name, pet name, task title, length)"]
+      C4[Fallback: return rule-based text]
+      C5[pawpal_ai.log]
+    end
+
+    subgraph Tests["Test Suite — tests/test_pawpal.py"]
+      D1[6 scheduler unit tests]
+      D2["7 AI unit tests (mocked, no API calls)"]
+      D3[1 live AI reliability test\nskips on 503]
+    end
+
+    U -->|sets name + time budget| A1
+    U -->|adds or removes| A2
+    U -->|adds, removes, marks done| A3
+    U -->|clicks| A4
+
+    A2 --> B1
+    A3 --> B1
+    A1 --> B1
+    A4 --> B2
+    B1 --> B2
+    B2 --> B3
+    B2 --> B4
+    B3 -->|warnings| A5
+    B2 -->|scheduled tasks| A5
+    B4 -->|plain text| A7
+    B4 -->|context for AI| C1
+
+    C1 --> C2
+    C2 -->|success| C3
+    C3 -->|score written| C5
+    C2 -->|error or empty response| C4
+    C3 -->|AI text| A6
+    C4 -->|fallback text| A6
+
+    D1 -.->|validates| B2
+    D1 -.->|validates| B3
+    D2 -.->|validates| C1
+    D2 -.->|validates| C3
+    D2 -.->|validates| C4
+    D3 -.->|validates| C2
+
+    classDef ui fill:#e8f4ff,stroke:#4a90d9,stroke-width:1px;
+    classDef core fill:#fdf6e3,stroke:#b8860b,stroke-width:1px;
+    classDef ai fill:#eef,stroke:#6a0dad,stroke-width:1px;
+    classDef test fill:#e8ffe8,stroke:#228b22,stroke-width:1px;
+    classDef human fill:#fde2e2,stroke:#cc0000,stroke-width:1px;
+
+    class U human;
+    class A1,A2,A3,A4,A5,A6,A7 ui;
+    class B1,B2,B3,B4 core;
+    class C1,C2,C3,C4,C5 ai;
+    class D1,D2,D3 test;
