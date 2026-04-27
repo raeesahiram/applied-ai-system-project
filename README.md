@@ -1,5 +1,10 @@
 # PawPal+ AI Edition
 
+## Demo
+[Watch the walkthrough](https://www.loom.com/share/a684b2225906453287237e56284b3f71)
+
+---
+
 A pet care scheduling app built on top of a rule-based system from a previous assignment, now extended with a Google Gemini AI assistant that explains the generated schedule in plain English.
 
 ---
